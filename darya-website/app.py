@@ -91,7 +91,7 @@ def admin():
 @app.route('/admin/login', methods=['POST'])
 def admin_login():
     password = request.form.get('password')
-    if password == 'darya_admin_2024':  # Simple password, change in production
+    if password == 'darya_admin_2025':  # Simple password, change in production
         session['admin_logged_in'] = True
         return redirect(url_for('admin'))
     return redirect(url_for('admin'))
