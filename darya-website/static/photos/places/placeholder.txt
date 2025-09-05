@@ -1,0 +1,3 @@
+Place your places photography files here.
+
+Supported formats: JPG, JPEG, PNG, WebP

@@ -1,0 +1,7 @@
+Place your video files here:
+- Art demo reel.mp4
+- Corporate demo reel.mp4  
+- Social demo reel.mp4
+- Any additional videos for the galleries
+
+Supported formats: MP4, WebM, OGG

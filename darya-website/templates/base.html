@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Darya Bernard - Videographer & Photographer{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAF0DC;
+            color: #A67A5B;
+            line-height: 1.6;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 40px;
+            background-color: rgba(250, 240, 220, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #A67A5B;
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: #A67A5B;
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            padding: 10px 0;
+        }
+
+        .nav-link:hover {
+            color: #bec991;
+            text-decoration: underline;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: rgba(250, 240, 220, 0.95);
+            backdrop-filter: blur(10px);
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 12px 20px;
+            color: #A67A5B;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(166, 122, 91, 0.1);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(190, 201, 145, 0.1);
+            color: #bec991;
+        }
+
+        .main-content {
+            margin-top: 80px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            padding: 60px 40px 40px;
+            color: white;
+        }
+
+        .about-section {
+            padding: 80px 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-section h2 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .about-section p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .contact-info {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+
+        .contact-item a {
+            color: #A67A5B;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            color: #bec991;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .video-item {
+            position: relative;
+            aspect-ratio: 16/9;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .video-item:hover {
+            transform: scale(1.02);
+        }
+
+        .video-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-grid {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .photo-item {
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .photo-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-item img:hover {
+            transform: scale(1.02);
+        }
+
+        .fullscreen-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fullscreen-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        .fullscreen-content img,
+        .fullscreen-content video {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .fullscreen-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .fullscreen-nav:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .fullscreen-nav.prev {
+            left: 20px;
+        }
+
+        .fullscreen-nav.next {
+            right: 20px;
+        }
+
+        .fullscreen-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .fullscreen-close:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .admin-link {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #A67A5B;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .admin-link:hover {
+            background-color: #bec991;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .nav {
+                gap: 20px;
+            }
+
+            .dropdown {
+                min-width: 150px;
+            }
+
+            .about-section {
+                padding: 60px 20px;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">Darya Bernard</a>
+            <nav>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Video</a>
+                        <div class="dropdown">
+                            <a href="/art" class="dropdown-item">Art</a>
+                            <a href="/corporate" class="dropdown-item">Corporate</a>
+                            <a href="/social" class="dropdown-item">Social</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Photo</a>
+                        <div class="dropdown">
+                            <a href="/people" class="dropdown-item">People</a>
+                            <a href="/places" class="dropdown-item">Places</a>
+                            <a href="/sports" class="dropdown-item">Sports</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <div class="fullscreen-overlay" id="fullscreenOverlay">
+        <div class="fullscreen-content">
+            <button class="fullscreen-close" onclick="closeFullscreen()">&times;</button>
+            <button class="fullscreen-nav prev" onclick="previousItem()">&larr;</button>
+            <button class="fullscreen-nav next" onclick="nextItem()">&rarr;</button>
+            <div id="fullscreenContent"></div>
+        </div>
+    </div>
+
+    <a href="/admin" class="admin-link">Admin</a>
+
+    <script>
+        // Fullscreen functionality
+        let currentItems = [];
+        let currentIndex = 0;
+
+        function openFullscreen(item, items) {
+            currentItems = items;
+            currentIndex = items.indexOf(item);
+            const overlay = document.getElementById('fullscreenOverlay');
+            const content = document.getElementById('fullscreenContent');
+            
+            if (item.tagName === 'VIDEO') {
+                content.innerHTML = `<video controls autoplay><source src="${item.src}" type="video/mp4"></video>`;
+            } else {
+                content.innerHTML = `<img src="${item.src}" alt="${item.alt || ''}">`;
+            }
+            
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFullscreen() {
+            const overlay = document.getElementById('fullscreenOverlay');
+            overlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextItem() {
+            if (currentItems.length > 0) {
+                currentIndex = (currentIndex + 1) % currentItems.length;
+                const item = currentItems[currentIndex];
+                const content = document.getElementById('fullscreenContent');
+                
+                if (item.tagName === 'VIDEO') {
+                    content.innerHTML = `<video controls autoplay><source src="${item.src}" type="video/mp4"></video>`;
+                } else {
+                    content.innerHTML = `<img src="${item.src}" alt="${item.alt || ''}">`;
+                }
+            }
+        }
+
+        function previousItem() {
+            if (currentItems.length > 0) {
+                currentIndex = (currentIndex - 1 + currentItems.length) % currentItems.length;
+                const item = currentItems[currentIndex];
+                const content = document.getElementById('fullscreenContent');
+                
+                if (item.tagName === 'VIDEO') {
+                    content.innerHTML = `<video controls autoplay><source src="${item.src}" type="video/mp4"></video>`;
+                } else {
+                    content.innerHTML = `<img src="${item.src}" alt="${item.alt || ''}">`;
+                }
+            }
+        }
+
+        // Close fullscreen on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeFullscreen();
+            }
+        });
+
+        // Scroll animations for photos
+        function animateOnScroll() {
+            const items = document.querySelectorAll('.photo-item');
+            items.forEach(item => {
+                const rect = item.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    item.classList.add('visible');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

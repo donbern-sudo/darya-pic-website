@@ -1,0 +1,480 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel - Darya Bernard{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px;
+    }
+
+    .admin-section {
+        background-color: white;
+        padding: 30px;
+        margin-bottom: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .admin-section h2 {
+        color: #A67A5B;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #A67A5B;
+        font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #A67A5B;
+        border-radius: 5px;
+        font-size: 16px;
+        color: #A67A5B;
+    }
+
+    .form-group textarea {
+        height: 100px;
+        resize: vertical;
+    }
+
+    .btn {
+        background-color: #A67A5B;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    .btn:hover {
+        background-color: #bec991;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .media-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .media-item {
+        position: relative;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .media-item img,
+    .media-item video {
+        max-width: 100%;
+        max-height: 150px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    .media-item .remove-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .file-input {
+        margin-bottom: 15px;
+    }
+
+    .logout-btn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #dc3545;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .logout-btn:hover {
+        background-color: #c82333;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<a href="/admin/logout" class="logout-btn">Logout</a>
+
+<div class="admin-container">
+    <h1 style="color: #A67A5B; margin-bottom: 30px; text-align: center;">Admin Panel</h1>
+
+    <!-- About Section -->
+    <div class="admin-section">
+        <h2>About Information</h2>
+        <form id="aboutForm">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" value="{{ data.about.name }}">
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description">{{ data.about.description }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" value="{{ data.about.phone }}">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" value="{{ data.about.email }}">
+            </div>
+            <div class="form-group">
+                <label for="instagram">Instagram:</label>
+                <input type="text" id="instagram" value="{{ data.about.instagram }}">
+            </div>
+            <button type="submit" class="btn">Update About</button>
+        </form>
+    </div>
+
+    <!-- Video Management -->
+    <div class="admin-section">
+        <h2>Video Management</h2>
+        <div style="margin-bottom: 30px;">
+            <h3>Art Videos</h3>
+            <div class="form-group">
+                <label for="artMainVideo">Main Video File:</label>
+                <input type="text" id="artMainVideo" value="{{ data.videos.art.main_video }}" placeholder="e.g., Art demo reel.mp4">
+            </div>
+            <div class="file-input">
+                <label for="artVideoUpload">Add Video to Gallery:</label>
+                <input type="file" id="artVideoUpload" accept="video/*">
+            </div>
+            <div class="media-grid" id="artVideoGrid">
+                {% for video in data.videos.art.gallery %}
+                <div class="media-item">
+                    <video controls>
+                        <source src="{{ url_for('static', filename='videos/' + video) }}" type="video/mp4">
+                    </video>
+                    <p>{{ video }}</p>
+                    <button class="remove-btn" onclick="removeVideo('art', '{{ video }}')">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div style="margin-bottom: 30px;">
+            <h3>Corporate Videos</h3>
+            <div class="form-group">
+                <label for="corporateMainVideo">Main Video File:</label>
+                <input type="text" id="corporateMainVideo" value="{{ data.videos.corporate.main_video }}" placeholder="e.g., Corporate demo reel.mp4">
+            </div>
+            <div class="file-input">
+                <label for="corporateVideoUpload">Add Video to Gallery:</label>
+                <input type="file" id="corporateVideoUpload" accept="video/*">
+            </div>
+            <div class="media-grid" id="corporateVideoGrid">
+                {% for video in data.videos.corporate.gallery %}
+                <div class="media-item">
+                    <video controls>
+                        <source src="{{ url_for('static', filename='videos/' + video) }}" type="video/mp4">
+                    </video>
+                    <p>{{ video }}</p>
+                    <button class="remove-btn" onclick="removeVideo('corporate', '{{ video }}')">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div style="margin-bottom: 30px;">
+            <h3>Social Videos</h3>
+            <div class="form-group">
+                <label for="socialMainVideo">Main Video File:</label>
+                <input type="text" id="socialMainVideo" value="{{ data.videos.social.main_video }}" placeholder="e.g., Social demo reel.mp4">
+            </div>
+            <div class="file-input">
+                <label for="socialVideoUpload">Add Video to Gallery:</label>
+                <input type="file" id="socialVideoUpload" accept="video/*">
+            </div>
+            <div class="media-grid" id="socialVideoGrid">
+                {% for video in data.videos.social.gallery %}
+                <div class="media-item">
+                    <video controls>
+                        <source src="{{ url_for('static', filename='videos/' + video) }}" type="video/mp4">
+                    </video>
+                    <p>{{ video }}</p>
+                    <button class="remove-btn" onclick="removeVideo('social', '{{ video }}')">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Management -->
+    <div class="admin-section">
+        <h2>Photo Management</h2>
+        <div style="margin-bottom: 30px;">
+            <h3>People Photos</h3>
+            <div class="file-input">
+                <label for="peoplePhotoUpload">Add Photos:</label>
+                <input type="file" id="peoplePhotoUpload" accept="image/*" multiple>
+            </div>
+            <div class="media-grid" id="peoplePhotoGrid">
+                {% for photo in data.photos.people %}
+                <div class="media-item">
+                    <img src="{{ url_for('static', filename='photos/people/' + photo) }}" alt="People Photo">
+                    <p>{{ photo }}</p>
+                    <button class="remove-btn" onclick="removePhoto('people', '{{ photo }}')">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div style="margin-bottom: 30px;">
+            <h3>Places Photos</h3>
+            <div class="file-input">
+                <label for="placesPhotoUpload">Add Photos:</label>
+                <input type="file" id="placesPhotoUpload" accept="image/*" multiple>
+            </div>
+            <div class="media-grid" id="placesPhotoGrid">
+                {% for photo in data.photos.places %}
+                <div class="media-item">
+                    <img src="{{ url_for('static', filename='photos/places/' + photo) }}" alt="Places Photo">
+                    <p>{{ photo }}</p>
+                    <button class="remove-btn" onclick="removePhoto('places', '{{ photo }}')">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div style="margin-bottom: 30px;">
+            <h3>Sports Photos</h3>
+            <div class="file-input">
+                <label for="sportsPhotoUpload">Add Photos:</label>
+                <input type="file" id="sportsPhotoUpload" accept="image/*" multiple>
+            </div>
+            <div class="media-grid" id="sportsPhotoGrid">
+                {% for photo in data.photos.sports %}
+                <div class="media-item">
+                    <img src="{{ url_for('static', filename='photos/sports/' + photo) }}" alt="Sports Photo">
+                    <p>{{ photo }}</p>
+                    <button class="remove-btn" onclick="removePhoto('sports', '{{ photo }}')">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // About form submission
+    document.getElementById('aboutForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const aboutData = {
+            name: document.getElementById('name').value,
+            description: document.getElementById('description').value,
+            phone: document.getElementById('phone').value,
+            email: document.getElementById('email').value,
+            instagram: document.getElementById('instagram').value
+        };
+
+        fetch('/api/update_about', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(aboutData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('About information updated successfully!');
+            } else {
+                alert('Error updating about information');
+            }
+        });
+    });
+
+    // Video management
+    function updateVideoData() {
+        const videoData = {
+            art: {
+                main_video: document.getElementById('artMainVideo').value,
+                gallery: Array.from(document.querySelectorAll('#artVideoGrid .media-item p')).map(p => p.textContent)
+            },
+            corporate: {
+                main_video: document.getElementById('corporateMainVideo').value,
+                gallery: Array.from(document.querySelectorAll('#corporateVideoGrid .media-item p')).map(p => p.textContent)
+            },
+            social: {
+                main_video: document.getElementById('socialMainVideo').value,
+                gallery: Array.from(document.querySelectorAll('#socialVideoGrid .media-item p')).map(p => p.textContent)
+            }
+        };
+
+        Object.keys(videoData).forEach(category => {
+            fetch('/api/update_video', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    category: category,
+                    video_data: videoData[category]
+                })
+            });
+        });
+    }
+
+    function removeVideo(category, filename) {
+        if (confirm('Are you sure you want to remove this video?')) {
+            const grid = document.getElementById(category + 'VideoGrid');
+            const items = grid.querySelectorAll('.media-item');
+            items.forEach(item => {
+                if (item.querySelector('p').textContent === filename) {
+                    item.remove();
+                }
+            });
+            updateVideoData();
+        }
+    }
+
+    function removePhoto(category, filename) {
+        if (confirm('Are you sure you want to remove this photo?')) {
+            const grid = document.getElementById(category + 'PhotoGrid');
+            const items = grid.querySelectorAll('.media-item');
+            items.forEach(item => {
+                if (item.querySelector('p').textContent === filename) {
+                    item.remove();
+                }
+            });
+            updatePhotoData();
+        }
+    }
+
+    function updatePhotoData() {
+        const photoData = {
+            people: Array.from(document.querySelectorAll('#peoplePhotoGrid .media-item p')).map(p => p.textContent),
+            places: Array.from(document.querySelectorAll('#placesPhotoGrid .media-item p')).map(p => p.textContent),
+            sports: Array.from(document.querySelectorAll('#sportsPhotoGrid .media-item p')).map(p => p.textContent)
+        };
+
+        Object.keys(photoData).forEach(category => {
+            fetch('/api/update_photos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    category: category,
+                    photos: photoData[category]
+                })
+            });
+        });
+    }
+
+    // File upload handlers
+    document.getElementById('artVideoUpload').addEventListener('change', function(e) {
+        handleFileUpload(e, 'artVideoGrid', 'video');
+    });
+
+    document.getElementById('corporateVideoUpload').addEventListener('change', function(e) {
+        handleFileUpload(e, 'corporateVideoGrid', 'video');
+    });
+
+    document.getElementById('socialVideoUpload').addEventListener('change', function(e) {
+        handleFileUpload(e, 'socialVideoGrid', 'video');
+    });
+
+    document.getElementById('peoplePhotoUpload').addEventListener('change', function(e) {
+        handleFileUpload(e, 'peoplePhotoGrid', 'image');
+    });
+
+    document.getElementById('placesPhotoUpload').addEventListener('change', function(e) {
+        handleFileUpload(e, 'placesPhotoGrid', 'image');
+    });
+
+    document.getElementById('sportsPhotoUpload').addEventListener('change', function(e) {
+        handleFileUpload(e, 'sportsPhotoGrid', 'image');
+    });
+
+    function handleFileUpload(event, gridId, type) {
+        const files = event.target.files;
+        const grid = document.getElementById(gridId);
+        
+        Array.from(files).forEach(file => {
+            const mediaItem = document.createElement('div');
+            mediaItem.className = 'media-item';
+            
+            if (type === 'video') {
+                mediaItem.innerHTML = `
+                    <video controls>
+                        <source src="${URL.createObjectURL(file)}" type="video/mp4">
+                    </video>
+                    <p>${file.name}</p>
+                    <button class="remove-btn" onclick="removeVideo('${gridId.replace('VideoGrid', '')}', '${file.name}')">&times;</button>
+                `;
+            } else {
+                mediaItem.innerHTML = `
+                    <img src="${URL.createObjectURL(file)}" alt="${type}">
+                    <p>${file.name}</p>
+                    <button class="remove-btn" onclick="removePhoto('${gridId.replace('PhotoGrid', '')}', '${file.name}')">&times;</button>
+                `;
+            }
+            
+            grid.appendChild(mediaItem);
+        });
+        
+        if (type === 'video') {
+            updateVideoData();
+        } else {
+            updatePhotoData();
+        }
+    }
+
+    // Auto-save on input change
+    document.querySelectorAll('input[type="text"], textarea').forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.id.includes('MainVideo')) {
+                updateVideoData();
+            }
+        });
+    });
+</script>
+{% endblock %}

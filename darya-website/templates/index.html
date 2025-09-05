@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Darya Bernard - Videographer & Photographer{% endblock %}
+
+{% block content %}
+<div class="video-container">
+    <video autoplay muted loop>
+        <source src="{{ url_for('static', filename='videos/Art demo reel.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="video-overlay">
+        <h1 style="font-size: 48px; margin-bottom: 20px; font-weight: 700;">Darya Bernard</h1>
+        <p style="font-size: 24px; margin-bottom: 10px;">Videographer & Photographer</p>
+        <p style="font-size: 18px; opacity: 0.9;">Boston, MA</p>
+    </div>
+</div>
+
+<div class="about-section">
+    <h2>About</h2>
+    <p>{{ data.about.description }}</p>
+    <div class="contact-info">
+        <div class="contact-item">
+            <span>📞</span>
+            <a href="tel:{{ data.about.phone }}">{{ data.about.phone }}</a>
+        </div>
+        <div class="contact-item">
+            <span>✉️</span>
+            <a href="mailto:{{ data.about.email }}">{{ data.about.email }}</a>
+        </div>
+        <div class="contact-item">
+            <span>📷</span>
+            <a href="https://instagram.com/{{ data.about.instagram.replace('@', '') }}" target="_blank">{{ data.about.instagram }}</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

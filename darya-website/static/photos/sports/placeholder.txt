@@ -1,0 +1,3 @@
+Place your sports photography files here.
+
+Supported formats: JPG, JPEG, PNG, WebP
