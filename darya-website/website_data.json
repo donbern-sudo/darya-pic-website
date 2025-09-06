@@ -1,0 +1,28 @@
+{
+  "about": {
+    "name": "Darya Bernard",
+    "description": "Darya Bernard is a videographer and photographer from Boston, Massachusetts",
+    "phone": "704-789-3492",
+    "email": "darya.bernard603@gmail.com",
+    "instagram": "@jpegdarya"
+  },
+  "videos": {
+    "art": {
+      "main_video": "Art demo reel.mp4",
+      "gallery": []
+    },
+    "corporate": {
+      "main_video": "Corporate demo reel.mp4",
+      "gallery": []
+    },
+    "social": {
+      "main_video": "Social demo reel.mp4",
+      "gallery": []
+    }
+  },
+  "photos": {
+    "people": [],
+    "places": [],
+    "sports": []
+  }
+}
