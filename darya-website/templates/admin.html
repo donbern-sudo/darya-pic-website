@@ -173,6 +173,7 @@
     <!-- Video Management -->
     <div class="admin-section">
         <h2>Video Management</h2>
+        <button type="button" class="btn" onclick="updateVideoData()" style="margin-bottom: 20px;">Save Video Changes</button>
         <div style="margin-bottom: 30px;">
             <h3>Art Videos</h3>
             <div class="form-group">
@@ -246,6 +247,7 @@
     <!-- Photo Management -->
     <div class="admin-section">
         <h2>Photo Management</h2>
+        <button type="button" class="btn" onclick="updatePhotoData()" style="margin-bottom: 20px;">Save Photo Changes</button>
         <div style="margin-bottom: 30px;">
             <h3>People Photos</h3>
             <div class="file-input">
@@ -348,8 +350,8 @@
             }
         };
 
-        Object.keys(videoData).forEach(category => {
-            fetch('/api/update_video', {
+        let promises = Object.keys(videoData).map(category => {
+            return fetch('/api/update_video', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -359,6 +361,20 @@
                     video_data: videoData[category]
                 })
             });
+        });
+
+        Promise.all(promises)
+        .then(responses => {
+            const allSuccessful = responses.every(response => response.ok);
+            if (allSuccessful) {
+                alert('Video changes saved successfully! The main page will now show your updated videos.');
+            } else {
+                alert('Error saving video changes. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error saving video changes. Please try again.');
         });
     }
 
@@ -395,8 +411,8 @@
             sports: Array.from(document.querySelectorAll('#sportsPhotoGrid .media-item p')).map(p => p.textContent)
         };
 
-        Object.keys(photoData).forEach(category => {
-            fetch('/api/update_photos', {
+        let promises = Object.keys(photoData).map(category => {
+            return fetch('/api/update_photos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -406,6 +422,20 @@
                     photos: photoData[category]
                 })
             });
+        });
+
+        Promise.all(promises)
+        .then(responses => {
+            const allSuccessful = responses.every(response => response.ok);
+            if (allSuccessful) {
+                alert('Photo changes saved successfully!');
+            } else {
+                alert('Error saving photo changes. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error saving photo changes. Please try again.');
         });
     }
 
