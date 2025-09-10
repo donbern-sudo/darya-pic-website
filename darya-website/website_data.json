@@ -8,15 +8,15 @@
   },
   "videos": {
     "art": {
-      "main_video": "Art demo reel.mp4",
+      "main_video": "",
       "gallery": []
     },
     "corporate": {
-      "main_video": "Corporate demo reel.mp4",
+      "main_video": "",
       "gallery": []
     },
     "social": {
-      "main_video": "Social demo reel.mp4",
+      "main_video": "",
       "gallery": []
     }
   },

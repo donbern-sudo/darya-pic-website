@@ -2,12 +2,46 @@
 
 {% block title %}Darya Bernard - Videographer & Photographer{% endblock %}
 
+{% block extra_css %}
+<style>
+    .no-video-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #FAF0DC 0%, #e8dcc0 100%);
+        color: #A67A5B;
+        text-align: center;
+        padding: 40px;
+    }
+    
+    .no-video-placeholder h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+    
+    .no-video-placeholder p {
+        font-size: 1.2rem;
+        opacity: 0.8;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="video-container">
+    {% if data.videos.art.main_video %}
     <video autoplay muted loop>
         <source src="{{ url_for('static', filename='videos/' + data.videos.art.main_video) }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
+    {% else %}
+    <div class="no-video-placeholder">
+        <h2>Welcome to Darya Bernard's Portfolio</h2>
+        <p>Upload a main video through the admin panel to see it here</p>
+    </div>
+    {% endif %}
     <div class="video-overlay">
         <h1 style="font-size: 48px; margin-bottom: 20px; font-weight: 700;">Darya Bernard</h1>
         <p style="font-size: 24px; margin-bottom: 10px;">Videographer & Photographer</p>
