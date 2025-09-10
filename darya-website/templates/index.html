@@ -32,10 +32,14 @@
 {% block content %}
 <div class="video-container">
     {% if data.videos.art.main_video %}
-    <video autoplay muted loop>
+    <video autoplay muted loop onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <source src="{{ url_for('static', filename='videos/' + data.videos.art.main_video) }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
+    <div class="no-video-placeholder" style="display: none;">
+        <h2>Video Not Found</h2>
+        <p>Please upload "{{ data.videos.art.main_video }}" to the static/videos/ folder</p>
+    </div>
     {% else %}
     <div class="no-video-placeholder">
         <h2>Welcome to Darya Bernard's Portfolio</h2>
