@@ -154,3 +154,4 @@ For technical support or questions about the website, contact the developer or r
 ---
 
 **Note**: This website is designed specifically for Darya Bernard's portfolio. All styling and functionality are tailored to her requirements as specified in the project brief.
+

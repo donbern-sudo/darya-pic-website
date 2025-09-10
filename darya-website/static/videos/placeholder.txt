@@ -5,3 +5,4 @@ Place your video files here:
 - Any additional videos for the galleries
 
 Supported formats: MP4, WebM, OGG
+

@@ -4,7 +4,8 @@ import os
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.secret_key = 'd@ry@_website_secret_key_2025'
+# In production, use environment variable for secret key
+app.secret_key = os.environ.get('SECRET_KEY', 'darya_website_secret_key_2024_production')
 
 # Data storage (in production, use a proper database)
 DATA_FILE = 'website_data.json'
@@ -91,7 +92,9 @@ def admin():
 @app.route('/admin/login', methods=['POST'])
 def admin_login():
     password = request.form.get('password')
-    if password == 'D@ry@_admin_2025':  # Simple password, change in production
+    # Use environment variable for admin password in production
+    admin_password = os.environ.get('ADMIN_PASSWORD', 'darya_admin_2025')
+    if password == admin_password:
         session['admin_logged_in'] = True
         return redirect(url_for('admin'))
     return redirect(url_for('admin'))
@@ -144,4 +147,6 @@ def update_photos():
     return jsonify({'error': 'Invalid category'}), 400
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # For production, use gunicorn instead
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
