@@ -81,6 +81,16 @@ def sports():
     data = load_data()
     return render_template('sports.html', data=data)
 
+@app.route('/debug')
+def debug():
+    data = load_data()
+    return render_template('debug.html', data=data)
+
+@app.route('/api/debug')
+def api_debug():
+    data = load_data()
+    return jsonify(data)
+
 @app.route('/admin')
 def admin():
     if not session.get('admin_logged_in'):
@@ -120,9 +130,20 @@ def update_video():
     category = request.json.get('category')
     video_data = request.json.get('video_data')
     
+    # Debug logging
+    print(f"Updating video for category: {category}")
+    print(f"Video data received: {video_data}")
+    
     if category in data['videos']:
+        # Ensure main_video is not empty string if it has content
+        if video_data.get('main_video') and video_data['main_video'].strip():
+            video_data['main_video'] = video_data['main_video'].strip()
+        else:
+            video_data['main_video'] = ""
+            
         data['videos'][category] = video_data
         save_data(data)
+        print(f"Saved video data: {data['videos'][category]}")
         return jsonify({'success': True})
     
     return jsonify({'error': 'Invalid category'}), 400

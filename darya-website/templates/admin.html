@@ -337,18 +337,21 @@
     function updateVideoData() {
         const videoData = {
             art: {
-                main_video: document.getElementById('artMainVideo').value,
+                main_video: document.getElementById('artMainVideo').value.trim(),
                 gallery: Array.from(document.querySelectorAll('#artVideoGrid .media-item p')).map(p => p.textContent)
             },
             corporate: {
-                main_video: document.getElementById('corporateMainVideo').value,
+                main_video: document.getElementById('corporateMainVideo').value.trim(),
                 gallery: Array.from(document.querySelectorAll('#corporateVideoGrid .media-item p')).map(p => p.textContent)
             },
             social: {
-                main_video: document.getElementById('socialMainVideo').value,
+                main_video: document.getElementById('socialMainVideo').value.trim(),
                 gallery: Array.from(document.querySelectorAll('#socialVideoGrid .media-item p')).map(p => p.textContent)
             }
         };
+
+        // Debug logging
+        console.log('Sending video data:', videoData);
 
         let promises = Object.keys(videoData).map(category => {
             return fetch('/api/update_video', {

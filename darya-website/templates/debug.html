@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Darya Bernard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Debug Information</h1>
+    
+    <div class="debug-section">
+        <h2>Current Video Data</h2>
+        <pre id="videoData"></pre>
+    </div>
+    
+    <div class="debug-section">
+        <h2>Test Video Display</h2>
+        <p>Art Main Video: <span id="artVideo"></span></p>
+        <p>Corporate Main Video: <span id="corporateVideo"></span></p>
+        <p>Social Main Video: <span id="socialVideo"></span></p>
+    </div>
+    
+    <div class="debug-section">
+        <h2>Test Video Player</h2>
+        <video id="testVideo" controls width="400" height="300">
+            <source id="videoSource" src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <br><br>
+        <button onclick="testVideo()">Test Art Video</button>
+    </div>
+
+    <script>
+        // Load current data
+        fetch('/api/debug')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('videoData').textContent = JSON.stringify(data, null, 2);
+            document.getElementById('artVideo').textContent = data.videos.art.main_video || 'EMPTY';
+            document.getElementById('corporateVideo').textContent = data.videos.corporate.main_video || 'EMPTY';
+            document.getElementById('socialVideo').textContent = data.videos.social.main_video || 'EMPTY';
+        });
+
+        function testVideo() {
+            const videoSource = document.getElementById('videoSource');
+            const video = document.getElementById('testVideo');
+            
+            fetch('/api/debug')
+            .then(response => response.json())
+            .then(data => {
+                const videoFile = data.videos.art.main_video;
+                if (videoFile) {
+                    videoSource.src = `/static/videos/${videoFile}`;
+                    video.load();
+                    console.log(`Testing video: /static/videos/${videoFile}`);
+                } else {
+                    alert('No video file set for art category');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
